@@ -33,6 +33,7 @@ void Load::loadBuses(Graph& g) {
         getline(lineBus,dest,' ');
         getline(lineBus,cap,' ');
         getline(lineBus,dur,' ');
+        cout << src << " " << dest << " " << cap << " " <<dur << endl;
         g.addEdge(stoi(src), stoi(dest), stoi(cap), stoi(dur));
     }
 

@@ -26,6 +26,7 @@ void Graph::addEdge(int src, int dest, int capacity, int duration) {
     e.capacity = capacity;
     e.duration = duration;
     nodes[src].adj.push_back(e);
+    cout << nodes.size() << endl;
 }
 
 vector<Node> &Graph::getNodes() {
@@ -45,7 +46,65 @@ void Graph::printGraph() {
 
 }
 
-/*void Graph::bfs(int v, int final) {
+void Graph::dijkstraMaximumCapacity(int s, int final){
+    MaxHeap<int, int> q(n, -1);
+    for (int v=0; v<n; v++) {
+        nodes[v].cap = 0;
+        q.insert(v,0);
+        nodes[v].visited =false;
+    }
+
+    nodes[s].cap = INF;
+    q.increaseKey(s, INF);
+    while(q.getSize() > 0){
+        int v = q.removeMax();
+        for (Edge w : nodes[v].adj){
+            if(min(nodes[v].cap, w.capacity) > nodes[w.dest].cap){
+                nodes[w.dest].cap = min(nodes[v].cap, w.capacity);
+                nodes[w.dest].pred = v;
+                q.increaseKey(w.dest, nodes[w.dest].cap);
+            }
+        }
+    }
+    cout << nodes[final].cap << endl;
+}
+
+
+void Graph::dijkstraTranshipments(int s,  int final) {
+    MaxHeap<int, int> q(n, -1);
+    for (int v=0; v<n; v++) {
+        nodes[v].transhipment = INF;
+        nodes[v].pred = 0;
+        nodes[v].cap = 0;
+        nodes[s].transhipment = 0;
+        q.insert(v,0);
+        nodes[v].visited =false;
+    }
+
+    nodes[s].cap = INF;
+    q.increaseKey(s, INF);
+    while(q.getSize() > 0){
+        int v = q.removeMax();
+        for (Edge w : nodes[v].adj){
+            if(((nodes[v].transhipment +1) < nodes[w.dest].transhipment) && (min(nodes[v].cap, w.capacity) > nodes[w.dest].cap)){
+                nodes[w.dest].cap = min(nodes[v].cap, w.capacity);
+                nodes[w.dest].pred = v;
+                nodes[w.dest].transhipment = nodes[v].transhipment +1;
+                q.increaseKey(w.dest, nodes[w.dest].cap);
+            }
+        }
+    }
+    int i = final;
+    while(i != 0){
+        cout << nodes[i].pred << endl;
+        i = nodes[i].pred;
+    }
+    cout << nodes[final].cap << " "<< nodes[final].transhipment -1 << endl;
+}
+
+
+/*
+ void Graph::bfs(int v, int final) {
     for (int i=1; i<=n; i++) {
         nodes[i].setVisited(false);
         nodes[i].setDist(INF);
@@ -208,35 +267,6 @@ double Graph::haversine(double lat1, double lon1, double lat2, double lon2) {
     return  ret;
 }
 
-void Graph::dijkstra_Zones(int s) {
-    MinHeap<int, int> q(n, -1);
-    for (int v=0; v<n; v++) {
-        nodes[v].setDist(INF);
-        q.insert(v, INF);
-        nodes[v].setVisited(false);
-    }
-
-    nodes[s].setDist(0);
-    q.decreaseKey(s, 0);
-    nodes[s].setPred(s);
-    while (q.getSize()>0) {
-        int u = q.removeMin();
-        nodes[u].setVisited(true);
-        for (Edge e : nodes[u].getAdj()) {
-            int v = e.dest;
-            double w = 0;
-            if(nodes[v].getZone() != nodes[u].getZone()){
-                w = 1;
-            }
-            if (!nodes[v].getVisited() && nodes[u].getDist() + w < nodes[v].getDist()) {
-                nodes[v].setDist(nodes[u].getDist() + w);
-                q.decreaseKey(v, nodes[v].getDist());
-                nodes[v].setPred(u);
-                nodes[v].setCurrentLine({e.lines});
-            }
-        }
-    }
-}
 
 void Graph::addEdgesWalk(double distance) {
     for(node& n: nodes){

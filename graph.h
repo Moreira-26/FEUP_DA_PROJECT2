@@ -20,9 +20,10 @@ struct Edge {
 
 struct Node {
     list<Edge> adj; // The list of outgoing edges (to adjacent nodes)
-    int dist = 0;
+    int cap = 0;
     int pred = 0;
     bool visited = false;
+    int transhipment = 0;
 };
 
 
@@ -128,6 +129,10 @@ public:
      * @return vetor com todos os nós do grafo
      */
     vector<Node>& getNodes();
+
+    void dijkstraMaximumCapacity(int s, int final);
+
+    void dijkstraTranshipments(int s,  int final);
 
 };
 
