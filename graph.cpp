@@ -22,11 +22,10 @@ Graph::Graph( bool dir, vector<Node> nodes){
 void Graph::addEdge(int src, int dest, int capacity, int duration) {
     if (src<0 || src>n || dest<0 || dest>n) return;
     Edge e;
-    e.dest = dest;
+    e.dest = dest -1;
     e.capacity = capacity;
     e.duration = duration;
-    nodes[src].adj.push_back(e);
-    cout << nodes.size() << endl;
+    nodes[src - 1].adj.push_back(e);
 }
 
 vector<Node> &Graph::getNodes() {
@@ -40,13 +39,14 @@ void Graph::setNumNodes(int numNodes){
 void Graph::printGraph() {
     for(int i = 0; i < nodes.size(); i++){
         for(Edge&e:nodes[i].adj){
-            cout << i << " " << e.dest << " " << e.capacity << " " <<e.duration << endl;
+            cout << i+1 << " " << e.dest << " " << e.capacity << " " <<e.duration << endl;
         }
     }
 
 }
 
 void Graph::dijkstraMaximumCapacity(int s, int final){
+    s--; final--;
     MaxHeap<int, int> q(n, -1);
     for (int v=0; v<n; v++) {
         nodes[v].cap = 0;
@@ -66,11 +66,20 @@ void Graph::dijkstraMaximumCapacity(int s, int final){
             }
         }
     }
+    int i = final;
+    cout << final +1 << endl;
+    while(i != 0){
+        cout << nodes[i].pred +1 << endl;
+        i = nodes[i].pred;
+    }
+
     cout << nodes[final].cap << endl;
 }
 
 
 void Graph::dijkstraTranshipments(int s,  int final) {
+    s--; final--;
+    cout << s << " " << final << endl;
     MaxHeap<int, int> q(n, -1);
     for (int v=0; v<n; v++) {
         nodes[v].transhipment = INF;
@@ -86,7 +95,8 @@ void Graph::dijkstraTranshipments(int s,  int final) {
     while(q.getSize() > 0){
         int v = q.removeMax();
         for (Edge w : nodes[v].adj){
-            if(((nodes[v].transhipment +1) < nodes[w.dest].transhipment) && (min(nodes[v].cap, w.capacity) > nodes[w.dest].cap)){
+            cout << v << " " << w.dest << endl;
+            if(((nodes[v].transhipment +1) < nodes[w.dest].transhipment) /*&& (min(nodes[v].cap, w.capacity) > nodes[w.dest].cap)*/){
                 nodes[w.dest].cap = min(nodes[v].cap, w.capacity);
                 nodes[w.dest].pred = v;
                 nodes[w.dest].transhipment = nodes[v].transhipment +1;

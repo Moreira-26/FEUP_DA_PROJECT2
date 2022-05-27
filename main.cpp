@@ -7,7 +7,7 @@ int main() {
     Load l;
     l.loadBuses(g);
     //g.printGraph();
-    //g.dijkstraTranshipments(1, 4);
+    g.dijkstraMaximumCapacity(1, 4);
 
     return 0;
 }
