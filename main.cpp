@@ -6,8 +6,10 @@ int main() {
     Graph g;
     Load l;
     l.loadBuses(g);
-    //g.printGraph();
-    g.dijkstraMaximumCapacity(1, 4);
+    g.fordFulkerson(1, 4);
+    g.printGraph(1);
+
+
 
     return 0;
 }

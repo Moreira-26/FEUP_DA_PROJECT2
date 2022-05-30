@@ -16,14 +16,18 @@ struct Edge {
     int dest;   // Destination node
     int capacity;
     int duration;// An integer weight
+    int residualCapacity  = 0;
+    int reverseResidualCapacity = 0;
+    int flow = 0;
 };
 
 struct Node {
     list<Edge> adj; // The list of outgoing edges (to adjacent nodes)
     int cap = 0;
-    int pred = 0;
+    int pred = -1;
     bool visited = false;
     int transhipment = 0;
+    int dist = 0;
 };
 
 
@@ -43,7 +47,7 @@ public:
 
     void setNumNodes(int numNodes);
 
-    void printGraph();
+    void printGraph(int s);
     /**
      * Construtor da classe graph
      * @param dir grafo dirigido ou nao
@@ -65,7 +69,8 @@ public:
      * @param v id do nó de origem
      * @param final id do nó de destino
      */
-    //void bfs (int v, int final);
+    bool bfs (int v, int final);
+
 
     /**
      * Este método executa o algoritmo dijkstra em que o peso da aresta é 1 se mudar de zona,  0 nos restantes casos
@@ -133,6 +138,10 @@ public:
     void dijkstraMaximumCapacity(int s, int final);
 
     void dijkstraTranshipments(int s,  int final);
+
+    void fordFulkerson(int s, int t);
+
+    void fordFulkersonGroupSize(int s, int t, int groupSize);
 
 };
 

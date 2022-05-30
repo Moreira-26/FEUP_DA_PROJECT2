@@ -8,6 +8,8 @@
 #include <climits>
 #include <queue>
 #include <cmath>
+#include <list>
+#include <algorithm>
 #define INF (INT_MAX/2)
 
 // Constructor: nr nodes and direction (default: undirected)
@@ -35,11 +37,18 @@ vector<Node> &Graph::getNodes() {
 void Graph::setNumNodes(int numNodes){
     this->n =numNodes;
 }
+bool compareEdge(Edge e1, Edge e2){
+    if(e1.capacity == e2.capacity){
+        return true;
+    }else{
+        return e1.capacity > e2.capacity;
+    }
+}
 
-void Graph::printGraph() {
+void Graph::printGraph(int s) {
     for(int i = 0; i < nodes.size(); i++){
         for(Edge&e:nodes[i].adj){
-            cout << i+1 << " " << e.dest << " " << e.capacity << " " <<e.duration << endl;
+            cout << i+1 << "->" << e.dest + 1 << " : " << e.reverseResidualCapacity << endl;
         }
     }
 
@@ -113,35 +122,143 @@ void Graph::dijkstraTranshipments(int s,  int final) {
 }
 
 
-/*
- void Graph::bfs(int v, int final) {
-    for (int i=1; i<=n; i++) {
-        nodes[i].setVisited(false);
-        nodes[i].setDist(INF);
+
+ bool Graph::bfs(int v, int final) {
+    for (int i=0; i<n; i++) {
+        nodes[i].visited = false;
+        nodes[i].dist = INF;
     }
     queue<int> q; // queue of unvisited nodes
     q.push(v);
-    nodes[v].setDist(0);
-    nodes[v].setVisited(true);
-    nodes[v].setPred(v);
-    while (!q.empty()) { // while there are still unvisited nodes
-        int u = q.front(); q.pop();// show node order
+    nodes[v].dist = 0;
+    nodes[v].visited = true;
+    nodes[v].pred = -1;
+    while (!q.empty()) {
+        // while there are still unvisited nodes
+        int u = q.front(); q.pop();
+        // show node order
         if(u == final){
-            break;
+            return true;
         }
-        for (auto e : nodes[u].getAdj()) {
+        for (auto &e : nodes[u].adj) {
             int w = e.dest;
-            if (!nodes[w].getVisited()) {
+            if (!nodes[w].visited && e.residualCapacity > 0 ) {
                 q.push(w);
-                nodes[w].setVisited(true);
-                nodes[w].setDist(nodes[u].getDist() + 1);
-                nodes[w].setPred(u);
-                nodes[w].setCurrentLine({e.lines});
+                nodes[w].visited = true;
+                nodes[w].dist = nodes[u].dist + 1;
+                nodes[w].pred = u;
             }
         }
     }
+
+     return false;
 }
 
+void Graph::fordFulkerson(int s, int t) {
+    s--;
+    t--;
+    for(int i = 0; i < n; i++){
+        for(Edge &e:nodes[i].adj){
+            e.residualCapacity = e.capacity;
+        }
+    }
+
+    int max_flow = 0;
+
+    while (bfs(s,t)){
+
+        int pathFlow = INF;
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            int rCapacity;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    rCapacity = e.residualCapacity;
+                    break;
+                }
+            }
+            pathFlow = min(pathFlow, rCapacity);
+        }
+
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    e.residualCapacity -= pathFlow;
+                    e.reverseResidualCapacity += pathFlow;
+                    break;
+                }
+            }
+        }
+
+        max_flow += pathFlow;
+
+    }
+
+
+    cout << max_flow << endl;
+}
+
+
+
+void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
+    s--;
+    t--;
+    for(int i = 0; i < n; i++){
+        for(Edge &e:nodes[i].adj){
+            e.residualCapacity = e.capacity;
+            e.reverseResidualCapacity = 0;
+        }
+    }
+
+    nodes[s].adj.sort(compareEdge);
+    for(Edge& e:nodes[s].adj){
+        if((groupSize - e.capacity) <= 0){
+            e.residualCapacity = e.capacity - groupSize;
+            e.reverseResidualCapacity = groupSize;
+            break;
+        }
+        e.residualCapacity = 0;
+        e.reverseResidualCapacity = e.capacity;
+        groupSize -= e.capacity;
+    }
+
+    int max_flow = 0;
+
+    printGraph(s);
+    while (bfs(s,t)){
+
+        int pathFlow = INF;
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            int rCapacity;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    rCapacity = e.residualCapacity;
+                    break;
+                }
+            }
+            pathFlow = min(pathFlow, rCapacity);
+        }
+
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    e.residualCapacity -= pathFlow;
+                    e.reverseResidualCapacity += pathFlow;
+                    break;
+                }
+            }
+        }
+
+        max_flow += pathFlow;
+    }
+
+
+
+}
+/*
 void Graph::setDistances() {
     for(int i = 0; i < nodes.size(); i++){
         for(Edge& e:nodes[i].getAdj()){
