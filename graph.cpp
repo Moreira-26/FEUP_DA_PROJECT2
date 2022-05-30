@@ -211,21 +211,10 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
         }
     }
 
-    nodes[s].adj.sort(compareEdge);
-    for(Edge& e:nodes[s].adj){
-        if((groupSize - e.capacity) <= 0){
-            e.residualCapacity = e.capacity - groupSize;
-            e.reverseResidualCapacity = groupSize;
-            break;
-        }
-        e.residualCapacity = 0;
-        e.reverseResidualCapacity = e.capacity;
-        groupSize -= e.capacity;
-    }
+    int size = groupSize;
 
     int max_flow = 0;
 
-    printGraph(s);
     while (bfs(s,t)){
 
         int pathFlow = INF;
@@ -239,12 +228,18 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
                 }
             }
             pathFlow = min(pathFlow, rCapacity);
+            pathFlow = min(pathFlow,groupSize);
+
         }
 
         for(int v = t; v != s; v = nodes[v].pred){
             int u = nodes[v].pred;
             for(Edge &e:nodes[u].adj){
                 if(e.dest == v){
+
+                    if(max_flow >= size){
+                        return;
+                    }
                     e.residualCapacity -= pathFlow;
                     e.reverseResidualCapacity += pathFlow;
                     break;
@@ -252,11 +247,10 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
             }
         }
 
+        groupSize-=pathFlow;
         max_flow += pathFlow;
+
     }
-
-
-
 }
 /*
 void Graph::setDistances() {

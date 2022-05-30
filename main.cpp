@@ -6,7 +6,7 @@ int main() {
     Graph g;
     Load l;
     l.loadBuses(g);
-    g.fordFulkerson(1, 4);
+    g.fordFulkersonGroupSize(1, 4,8);
     g.printGraph(1);
 
 
