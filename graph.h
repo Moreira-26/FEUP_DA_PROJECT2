@@ -74,64 +74,6 @@ public:
      */
     bool bfs (int v, int final);
 
-
-    /**
-     * Este método executa o algoritmo dijkstra em que o peso da aresta é 1 se mudar de zona,  0 nos restantes casos
-     * @param s id do nó de origem
-     */
-    //void dijkstra_Zones(int s);
-
-    /**
-     * Este método executa o algoritmo dijkstra em que o peso é a distância real entre paragens
-     * @param s id do nó de origem
-     */
-    //void dijkstra_distance(int s);
-
-    /**
-     * este método fornece a distância entre dois nós
-     * @param a id do nó de origem
-     * @param b id do nó de destino
-     * @return distância entre dois nós
-     */
-    //double dijkstra_getDistance(int a, int b);
-
-    /**
-     * Este método fornece a lista de paragens de 'a' a 'b' passando pelo menor numero de linhas
-     * @param a id do nó de origem
-     * @param b id do nó de destino
-     * @return
-     */
-    //list<pair<int,string>> dijkstra_path_Lines(int a, int b);
-
-    /**
-     * este método fornece a lista de paragens de 'a' a 'b'
-     * @param a id do nó de origem
-     * @param b id do nó de destino
-     * @return lista de paragens
-     */
-    //list<int> getPath(int a, int b);
-
-    /**
-     * método responsável por calcular a distância entre dois pontos
-     * @param lat1 latitude do local de partida
-     * @param lon1 longitude do local de partida
-     * @param lat2 latitude do local de destino
-     * @param lon2 longitude do local de destino
-     * @return
-     */
-    //double haversine(double lat1, double lon1, double lat2, double lon2);
-
-    /**
-     * método responsável por colocar a distancia nas respetivas arestas
-     */
-    //void setDistances();
-
-    /**
-     * método responsável por adicionar as arestas a andar a pé
-     * @param distance distância que o utilizador está disposto a andar a pé
-     */
-    //void addEdgesWalk(double distance);
-
     /**
      * método responsável por retornar o vetor com todos os nós do grafo
      * @return vetor com todos os nós do grafo
@@ -145,6 +87,8 @@ public:
     void fordFulkerson(int s, int t);
 
     void fordFulkersonGroupSize(int s, int t, int groupSize);
+
+    void timeUntilReunite(int s, int t, int groupSize);
 
 };
 
