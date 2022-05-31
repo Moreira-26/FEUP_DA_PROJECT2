@@ -213,5 +213,39 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
 }
 
 void Graph::timeUntilReunite(int s, int t, int groupSize) {
-
+    for(Node &v : nodes){
+        v.time = 0;
+        v.pred = -1;
+        v.degree = 0;
+    }
+    for(Node &v : nodes){
+        for(Edge &e : v.adj){
+            nodes[e.dest].degree++;
+        }
+    }
+    queue<int> q;
+    for(int i = 0; i < nodes.size(); i++){
+        if(nodes[i].degree == 0){
+            q.push(i);
+        }
+    }
+    int minDur = -1;
+    int vf = -1;
+    while(!q.empty()){
+        int v = q.front(); q.pop();
+        if(minDur < nodes[v].time){
+            minDur = nodes[v].time;
+            vf = v;
+        }
+        for(Edge &e: nodes[v].adj){
+            if(nodes[e.dest].time < (nodes[v].time + e.duration)){
+                nodes[e.dest].time = nodes[v].time + e.duration;
+                nodes[e.dest].pred = v;
+            }
+            nodes[e.dest].degree--;
+            if(nodes[e.dest].degree == 0){
+                q.push(e.dest);
+            }
+        }
+    }
 }

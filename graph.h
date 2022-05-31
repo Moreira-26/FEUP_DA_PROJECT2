@@ -28,6 +28,8 @@ struct Node {
     bool visited = false;
     int transhipment = 0;
     int dist = 0;
+    int time = 0;
+    int degree = 0;
 };
 
 
