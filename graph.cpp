@@ -19,6 +19,15 @@ Graph::Graph( bool dir, vector<Node> nodes){
     n = nodes.size();
 }
 
+void Graph::removeNode(){
+    nodes.pop_back();
+}
+
+void Graph::addNode(){
+    Node node;
+    nodes.push_back(node);
+}
+
 
 // Add edge from source to destination with a certain weight
 void Graph::addEdge(int src, int dest, int capacity, int duration) {
@@ -196,61 +205,18 @@ void Graph::fordFulkerson(int s, int t) {
     }
 
 
-    cout << max_flow << endl;
+    //cout << max_flow << endl;
 }
 
 
 
 void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
-    s--;
-    t--;
-    for(int i = 0; i < n; i++){
-        for(Edge &e:nodes[i].adj){
-            e.residualCapacity = e.capacity;
-            e.reverseResidualCapacity = 0;
-        }
-    }
+    setNumNodes(n+1);
+    addNode();
+    addEdge(n,s,groupSize, 24);
+    fordFulkerson(n, t);
+    removeNode();
 
-    int size = groupSize;
-
-    int max_flow = 0;
-
-    while (bfs(s,t)){
-
-        int pathFlow = INF;
-        for(int v = t; v != s; v = nodes[v].pred){
-            int u = nodes[v].pred;
-            int rCapacity;
-            for(Edge &e:nodes[u].adj){
-                if(e.dest == v){
-                    rCapacity = e.residualCapacity;
-                    break;
-                }
-            }
-            pathFlow = min(pathFlow, rCapacity);
-            pathFlow = min(pathFlow,groupSize);
-
-        }
-
-        for(int v = t; v != s; v = nodes[v].pred){
-            int u = nodes[v].pred;
-            for(Edge &e:nodes[u].adj){
-                if(e.dest == v){
-
-                    if(max_flow >= size){
-                        return;
-                    }
-                    e.residualCapacity -= pathFlow;
-                    e.reverseResidualCapacity += pathFlow;
-                    break;
-                }
-            }
-        }
-
-        groupSize-=pathFlow;
-        max_flow += pathFlow;
-
-    }
 }
 /*
 void Graph::setDistances() {

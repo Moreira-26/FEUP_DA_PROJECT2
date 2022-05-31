@@ -26,7 +26,7 @@ void Load::loadBuses(Graph& g) {
         Node n;
         g.getNodes().push_back(n);
     }
-
+    int aux = 0;
     while(getline(fileStream,line)){
         istringstream lineBus(line);
         getline(lineBus,src,' ');

@@ -44,6 +44,9 @@ class Graph {
     void dijkstra_Lines(int s);
 
 public:
+    void addNode();
+
+    void removeNode();
 
     void setNumNodes(int numNodes);
 
