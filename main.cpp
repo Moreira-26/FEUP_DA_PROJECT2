@@ -7,8 +7,10 @@ int main() {
     Load l;
     l.loadBuses(g);
     //g.fordFulkerson(1, 6);
-    g.fordFulkersonGroupSize(1, 6,4);
-    g.printGraph(1);
+    //g.fordFulkersonGroupSize(1, 6,4);
+    //g.timeUntilReunite(2,6);
+    g.fordFulkersonTime(1,6);
+    g.printGraph();
 
     return 0;
 }

@@ -48,11 +48,11 @@ class Graph {
 public:
     void addNode();
 
-    void removeNode();
+    void removeNode(int numNode);
 
     void setNumNodes(int numNodes);
 
-    void printGraph(int s);
+    void printGraph();
     /**
      * Construtor da classe graph
      * @param dir grafo dirigido ou nao
@@ -90,7 +90,9 @@ public:
 
     void fordFulkersonGroupSize(int s, int t, int groupSize);
 
-    void timeUntilReunite(int s, int t, int groupSize);
+    void timeUntilReunite(int s, int t);
+
+    void fordFulkersonTime(int s, int t);
 
 };
 

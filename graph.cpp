@@ -19,8 +19,9 @@ Graph::Graph( bool dir, vector<Node> nodes){
     n = nodes.size();
 }
 
-void Graph::removeNode(){
-    nodes.pop_back();
+//Remove no no index numNode
+void Graph::removeNode(int numNode){
+    nodes.erase(nodes.begin() + numNode);
 }
 
 void Graph::addNode(){
@@ -54,7 +55,7 @@ bool compareEdge(Edge e1, Edge e2){
     }
 }
 
-void Graph::printGraph(int s) {
+void Graph::printGraph() {
     for(int i = 0; i < nodes.size(); i++){
         for(Edge&e:nodes[i].adj){
             cout << i+1 << "->" << e.dest + 1 << " : " << e.reverseResidualCapacity << endl;
@@ -208,33 +209,42 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
     addNode();
     addEdge(n,s,groupSize, 24);
     fordFulkerson(n, t);
-    removeNode();
+    removeNode(nodes.size() - 1);
 
 }
 
-void Graph::timeUntilReunite(int s, int t, int groupSize) {
+void Graph::timeUntilReunite(int s, int t) {
+    s--;
+    t--;
+    removeNode(0);
+
     for(Node &v : nodes){
         v.time = 0;
         v.pred = -1;
         v.degree = 0;
+        v.visited = false;
     }
     for(Node &v : nodes){
         for(Edge &e : v.adj){
             nodes[e.dest].degree++;
         }
     }
+
     queue<int> q;
     for(int i = 0; i < nodes.size(); i++){
         if(nodes[i].degree == 0){
             q.push(i);
         }
     }
+
     int minDur = -1;
     int vf = -1;
     while(!q.empty()){
         int v = q.front(); q.pop();
+
         if(minDur < nodes[v].time){
             minDur = nodes[v].time;
+            cout << nodes[v].time << endl;
             vf = v;
         }
         for(Edge &e: nodes[v].adj){
@@ -248,4 +258,62 @@ void Graph::timeUntilReunite(int s, int t, int groupSize) {
             }
         }
     }
+
+    int i = vf;
+
+    //cout << vf + 1<< endl;
+    /*while(i != s){
+        cout << nodes[i].pred + 1 << endl;
+        i = nodes[i].pred;
+    }*/
+
+
+    //cout << "minDur" << minDur << endl;
+}
+
+void Graph::fordFulkersonTime(int s, int t) {
+    s--;
+    t--;
+    for(int i = 0; i < n; i++){
+        nodes[i].time = 0;
+        for(Edge &e:nodes[i].adj){
+            e.residualCapacity = e.capacity;
+        }
+    }
+
+    int max_flow = 0;
+
+
+    while (bfs(s,t)){
+
+        int pathFlow = INF;
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            int rCapacity;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    rCapacity = e.residualCapacity;
+                    break;
+                }
+            }
+            pathFlow = min(pathFlow, rCapacity);
+        }
+
+        for(int v = t; v != s; v = nodes[v].pred){
+            int u = nodes[v].pred;
+            for(Edge &e:nodes[u].adj){
+                if(e.dest == v){
+                    e.residualCapacity -= pathFlow;
+                    e.reverseResidualCapacity += pathFlow;
+                    if(nodes[u].time < (nodes[e.dest].time + e.duration)){
+                        nodes[u].time = nodes[e.dest].time + e.duration;
+                    }
+                    break;
+                }
+            }
+        }
+        max_flow += pathFlow;
+    }
+    cout << max_flow << endl;
+    cout << nodes[s].time << endl;
 }
