@@ -30,6 +30,7 @@ struct Node {
     int dist = 0;
     int time = 0;
     int degree = 0;
+    bool used = false;
 };
 
 
@@ -82,9 +83,9 @@ public:
      */
     vector<Node>& getNodes();
 
-    void dijkstraMaximumCapacity(int s, int final);
+    pair<int, int> dijkstraMaximumCapacity(int s, int final);
 
-    void dijkstraTranshipments(int s,  int final);
+    pair<int, int> dijkstraTranshipments(int s,  int final);
 
     void fordFulkerson(int s, int t);
 
@@ -94,6 +95,9 @@ public:
 
     void fordFulkersonTime(int s, int t);
 
+    void testPaths (int s, int t);
+
+    list<int> bfs_path(int v, int final);
 };
 
 

@@ -4,11 +4,8 @@
 
 #include "graph.h"
 
-#include "graph.h"
 #include <climits>
 #include <queue>
-#include <cmath>
-#include <list>
 #include <algorithm>
 #define INF (INT_MAX/2)
 
@@ -19,10 +16,11 @@ Graph::Graph( bool dir, vector<Node> nodes){
     n = nodes.size();
 }
 
-//Remove no no index numNode
+
 void Graph::removeNode(int numNode){
     nodes.erase(nodes.begin() + numNode);
 }
+
 
 void Graph::addNode(){
     Node node;
@@ -30,7 +28,6 @@ void Graph::addNode(){
 }
 
 
-// Add edge from source to destination with a certain weight
 void Graph::addEdge(int src, int dest, int capacity, int duration) {
     if (src<0 || src>n || dest<0 || dest>n) return;
     Edge e;
@@ -40,13 +37,17 @@ void Graph::addEdge(int src, int dest, int capacity, int duration) {
     nodes[src - 1].adj.push_back(e);
 }
 
+
 vector<Node> &Graph::getNodes() {
     return nodes;
 }
 
+
 void Graph::setNumNodes(int numNodes){
     this->n =numNodes;
 }
+
+
 bool compareEdge(Edge e1, Edge e2){
     if(e1.capacity == e2.capacity){
         return true;
@@ -54,6 +55,7 @@ bool compareEdge(Edge e1, Edge e2){
         return e1.capacity > e2.capacity;
     }
 }
+
 
 void Graph::printGraph() {
     for(int i = 0; i < nodes.size(); i++){
@@ -64,8 +66,10 @@ void Graph::printGraph() {
 
 }
 
-void Graph::dijkstraMaximumCapacity(int s, int final){
+
+pair<int, int> Graph::dijkstraMaximumCapacity(int s, int final){
     s--; final--;
+    int transhipments = 0;
     MaxHeap<int, int> q(n, -1);
     for (int v=0; v<n; v++) {
         nodes[v].cap = 0;
@@ -86,19 +90,20 @@ void Graph::dijkstraMaximumCapacity(int s, int final){
         }
     }
     int i = final;
-    cout << final +1 << endl;
-    while(i != 0){
-        cout << nodes[i].pred +1 << endl;
+    while(i != s){
+        transhipments++;
         i = nodes[i].pred;
     }
 
-    cout << nodes[final].cap << endl;
+    pair<int, int> result;
+    result.first =  nodes[final].cap;
+    result.second = transhipments;
+    return  result;
 }
 
 
-void Graph::dijkstraTranshipments(int s,  int final) {
+pair<int, int> Graph::dijkstraTranshipments(int s,  int final) {
     s--; final--;
-    cout << s << " " << final << endl;
     MaxHeap<int, int> q(n, -1);
     for (int v=0; v<n; v++) {
         nodes[v].transhipment = INF;
@@ -114,8 +119,7 @@ void Graph::dijkstraTranshipments(int s,  int final) {
     while(q.getSize() > 0){
         int v = q.removeMax();
         for (Edge w : nodes[v].adj){
-            cout << v << " " << w.dest << endl;
-            if(((nodes[v].transhipment +1) < nodes[w.dest].transhipment) /*&& (min(nodes[v].cap, w.capacity) > nodes[w.dest].cap)*/){
+            if((nodes[v].transhipment +1) < nodes[w.dest].transhipment){
                 nodes[w.dest].cap = min(nodes[v].cap, w.capacity);
                 nodes[w.dest].pred = v;
                 nodes[w.dest].transhipment = nodes[v].transhipment +1;
@@ -123,36 +127,30 @@ void Graph::dijkstraTranshipments(int s,  int final) {
             }
         }
     }
-    int i = final;
-    while(i != 0){
-        cout << nodes[i].pred << endl;
-        i = nodes[i].pred;
-    }
-    cout << nodes[final].cap << " "<< nodes[final].transhipment -1 << endl;
+    pair<int, int> result(nodes[final].cap, nodes[final].transhipment);
+    return result;
 }
 
 
-
- bool Graph::bfs(int v, int final) {
+bool Graph::bfs(int v, int final) {
     for (int i=0; i<n; i++) {
         nodes[i].visited = false;
         nodes[i].dist = INF;
+        nodes[i].used = false;
     }
-    queue<int> q; // queue of unvisited nodes
+    queue<int> q;
     q.push(v);
     nodes[v].dist = 0;
     nodes[v].visited = true;
     nodes[v].pred = -1;
     while (!q.empty()) {
-        // while there are still unvisited nodes
         int u = q.front(); q.pop();
-        // show node order
         if(u == final){
             return true;
         }
         for (auto &e : nodes[u].adj) {
             int w = e.dest;
-            if (!nodes[w].visited && e.residualCapacity > 0 ) {
+            if (!nodes[w].visited) {
                 q.push(w);
                 nodes[w].visited = true;
                 nodes[w].dist = nodes[u].dist + 1;
@@ -160,24 +158,59 @@ void Graph::dijkstraTranshipments(int s,  int final) {
             }
         }
     }
-
      return false;
 }
 
+
+list<int> Graph::bfs_path(int v, int final) {
+    for (int i=0; i<n; i++) {
+        nodes[i].visited = false;
+        nodes[i].dist = INF;
+    }
+    queue<int> q;
+    q.push(v);
+    nodes[v].dist = 0;
+    nodes[v].visited = true;
+    nodes[v].pred = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        if(u == final){
+            break;
+        }
+        for (auto &e : nodes[u].adj) {
+            int w = e.dest;
+            if (!nodes[w].visited && nodes[w].used) {
+                q.push(w);
+                nodes[w].visited = true;
+                nodes[w].dist = nodes[u].dist + 1;
+                nodes[w].pred = u;
+            }
+        }
+    }
+    list<int> result;
+    int i = final;
+    while(i != v){
+        result.push_front(i);
+        i = nodes[i].pred;
+    }
+    //push front in order to keep the order from the beginning to the end
+    result.push_front(i);
+    return result;
+}
+
+
 void Graph::fordFulkerson(int s, int t) {
-    s--;
-    t--;
+    s--; t--;
     for(int i = 0; i < n; i++){
         for(Edge &e:nodes[i].adj){
             e.residualCapacity = e.capacity;
         }
     }
-
     int max_flow = 0;
 
     while (bfs(s,t)){
-
         int pathFlow = INF;
+
         for(int v = t; v != s; v = nodes[v].pred){
             int u = nodes[v].pred;
             int rCapacity;
@@ -204,6 +237,7 @@ void Graph::fordFulkerson(int s, int t) {
     }
 }
 
+
 void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
     setNumNodes(n+1);
     addNode();
@@ -212,6 +246,7 @@ void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
     removeNode(nodes.size() - 1);
 
 }
+
 
 void Graph::timeUntilReunite(int s, int t) {
     s--;
@@ -222,7 +257,6 @@ void Graph::timeUntilReunite(int s, int t) {
         v.time = 0;
         v.pred = -1;
         v.degree = 0;
-        v.visited = false;
     }
     for(Node &v : nodes){
         for(Edge &e : v.adj){
@@ -258,18 +292,8 @@ void Graph::timeUntilReunite(int s, int t) {
             }
         }
     }
-
-    int i = vf;
-
-    //cout << vf + 1<< endl;
-    /*while(i != s){
-        cout << nodes[i].pred + 1 << endl;
-        i = nodes[i].pred;
-    }*/
-
-
-    //cout << "minDur" << minDur << endl;
 }
+
 
 void Graph::fordFulkersonTime(int s, int t) {
     s--;
@@ -317,3 +341,31 @@ void Graph::fordFulkersonTime(int s, int t) {
     cout << max_flow << endl;
     cout << nodes[s].time << endl;
 }
+
+void Graph::testPaths(int s, int t) {
+    s--;t--;
+    dijkstraTranshipments(s+1,t+1);
+    int aux = nodes[t].pred;
+    nodes[t].used = true;
+    while(aux != s){
+        nodes[aux].used = true;
+        aux = nodes[aux].pred;
+    }
+    nodes[s].used = true;
+    list<list<int>> paths;
+    for(int i = 0; i < n; i++){
+        nodes[i].used = true;
+        paths.push_back(bfs_path(s,t));
+    }
+
+    int path = 0;
+    for(auto &n: paths){
+        path++;
+        cout << path << ": ";
+        for(auto &s : n){
+            cout << s+1 << " ";
+        }
+        cout << endl;
+    }
+}
+

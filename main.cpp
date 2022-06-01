@@ -9,8 +9,9 @@ int main() {
     //g.fordFulkerson(1, 6);
     //g.fordFulkersonGroupSize(1, 6,4);
     //g.timeUntilReunite(2,6);
-    g.fordFulkersonTime(1,6);
-    g.printGraph();
+    //g.fordFulkersonTime(1,6);
+    //g.printGraph();
+    g.testPaths(1,6);
 
     return 0;
 }
