@@ -17,6 +17,11 @@ Graph::Graph(bool dir, vector<Node> nodes) {
 }
 
 
+int Graph::getNumberNodes() {
+    return n;
+}
+
+
 void Graph::removeNode(int numNode) {
     nodes.erase(nodes.begin() + numNode);
 }
@@ -48,13 +53,6 @@ void Graph::setNumNodes(int numNodes) {
 }
 
 
-bool compareEdge(Edge e1, Edge e2) {
-    if (e1.capacity == e2.capacity) {
-        return true;
-    } else {
-        return e1.capacity > e2.capacity;
-    }
-}
 
 
 void Graph::printGraph() {
@@ -240,7 +238,7 @@ void Graph::testPaths(int s, int t) {
 
     for (auto &n: paths) {
         path++;
-        cout  << "cap: " << n.first << " trans: " <<n.second.size() - 1 << " " << path << ": ";
+        cout  << "Capacity: " << n.first << " Transhipments: " <<n.second.size() - 1 << " Path: " << path;
         for (auto &s: n.second) {
             cout << s + 1 << " ";
         }
@@ -373,12 +371,13 @@ void Graph::fordFulkersonTime(int s, int t) {
         }
         max_flow += pathFlow;
     }
-    cout << max_flow << endl;
-    cout << nodes[s].time << endl;
+
+    cout <<"Time needed: " << nodes[s].time << endl;
+    cout << endl;
 }
 
 //2.5
-int Graph::earliestStart(int s, int t) {
+void Graph::earliestStart(int s, int t) {
     s--;
     t--;
 
@@ -387,6 +386,7 @@ int Graph::earliestStart(int s, int t) {
         v.pred = -1;
         v.degree = 0;
         v.used = false;
+        v.waitingTime = 0;
     }
     queue<int> q1;
     nodes[s].used = true;
@@ -438,115 +438,23 @@ int Graph::earliestStart(int s, int t) {
             }
         }
     }
-    /*for(int i = 0; i< n; i++){
-        cout << i +1 << ": " << nodes[i].time << endl;
-    }*/
-    return nodes[t].time;
-}
-
-void Graph::transposeGraph() {
-    for(int i = 0; i < n; i++){
-        nodes[i].adj = {};
-    }
-    ifstream fileStream;
-    string firstLine, line;
-
-    fileStream.open(FILE_NAME);
-
-    getline(fileStream,firstLine);
-
-    int aux = 0;
-    while(getline(fileStream,line)){
-        string src, dest, cap, dur;
-        istringstream lineBus(line);
-        getline(lineBus,src,' ');
-        getline(lineBus,dest,' ');
-        getline(lineBus,cap,' ');
-        getline(lineBus,dur,' ');
-        if(original){
-            addEdge(stoi(dest), stoi(src), stoi(cap), stoi(dur));
-        }else{
-            addEdge(stoi(src), stoi(dest), stoi(cap), stoi(dur));
-        }
-    }
-    if(original){
-        original = false;
-    }else{
-        original = true;
-    }
-    fileStream.close();
-}
-
-//2.5
-void Graph::latestFinish(int s, int t) {
-    earliestStart(s,t);
-    for (Node &v: nodes) {
-        v.latestTime = 0;
-        //v.latestTime = minDur;
-        //v.latestStart = 0;
-        //v.degree = 0;
-        //v.used = false;
-    }
-    /*transposeGraph();
-    queue<int> q1;
-    nodes[t].used = true;
-    q1.push(t);
-    while(!q1.empty()){
-        int i = q1.front();
-        if(i == s){
-            break;
-        }
-        q1.pop();
-        for(Edge &e: nodes[i].adj){
-            nodes[e.dest].used = true;
-            q1.push(e.dest);
-        }
-    }
-
-
-    for (Node &v: nodes) {
-        if(!v.used){
-            continue;
-        }
-        for (Edge &e: v.adj) {
-            nodes[e.dest].degree++;
-        }
-    }
-
-    //transpor grafo
-
-    queue<int> q;
-    q.push(t);
-    while (!q.empty()){
-        int v = q.front();
-        q.pop();
-        if(v == s){
-            break;
-        }
-        for(Edge &e: nodes[v].adj){
-            if(nodes[e.dest].latestTime > (nodes[v].latestTime - e.duration)){
-                nodes[e.dest].latestTime = (nodes[v].latestTime - e.duration);
-            }
-            nodes[e.dest].degree--;
-            if (nodes[e.dest].degree == 0) {
-                q.push(e.dest);
-            }
-        }
-    }*/
-    s--; t--;
     for(Node &v: nodes){
-       for(Edge &e: v.adj){
-           if(v.used) {
-               nodes[e.dest].latestTime = max((nodes[e.dest].time - (v.time + e.duration)), nodes[e.dest].latestTime);
-           }
-       }
+        for(Edge &e: v.adj){
+            if(v.used) {
+                nodes[e.dest].waitingTime = max((nodes[e.dest].time - (v.time + e.duration)), nodes[e.dest].waitingTime);
+            }
+        }
     }
     for(int i = 0; i< n; i++){
         if(nodes[i].used){
-            cout << i +1 << ": " << nodes[i].latestTime << endl;
+            cout << i +1 << ": " << nodes[i].waitingTime << endl;
         }
     }
+
 }
+
+
+
 
 
 

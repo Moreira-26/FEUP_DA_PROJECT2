@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/DA_Project2.dir/load.cpp.o.d"
   "CMakeFiles/DA_Project2.dir/main.cpp.o"
   "CMakeFiles/DA_Project2.dir/main.cpp.o.d"
+  "CMakeFiles/DA_Project2.dir/menus.cpp.o"
+  "CMakeFiles/DA_Project2.dir/menus.cpp.o.d"
   "DA_Project2"
   "DA_Project2.pdb"
 )

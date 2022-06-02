@@ -201,6 +201,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DA_Project2.dir/build.make CMakeFiles/DA_Project2.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+menus.o: menus.cpp.o
+.PHONY : menus.o
+
+# target to build an object file
+menus.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DA_Project2.dir/build.make CMakeFiles/DA_Project2.dir/menus.cpp.o
+.PHONY : menus.cpp.o
+
+menus.i: menus.cpp.i
+.PHONY : menus.i
+
+# target to preprocess a source file
+menus.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DA_Project2.dir/build.make CMakeFiles/DA_Project2.dir/menus.cpp.i
+.PHONY : menus.cpp.i
+
+menus.s: menus.cpp.s
+.PHONY : menus.s
+
+# target to generate assembly for a file
+menus.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DA_Project2.dir/build.make CMakeFiles/DA_Project2.dir/menus.cpp.s
+.PHONY : menus.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -219,6 +243,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... menus.o"
+	@echo "... menus.i"
+	@echo "... menus.s"
 .PHONY : help
 
 

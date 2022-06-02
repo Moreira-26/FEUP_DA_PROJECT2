@@ -98,6 +98,12 @@
 		<Unit filename="/Users/hugogomes/FEUP/DA/projeto2/DA_Project2/maxHeap.h">
 			<Option target="DA_Project2"/>
 		</Unit>
+		<Unit filename="/Users/hugogomes/FEUP/DA/projeto2/DA_Project2/menus.cpp">
+			<Option target="DA_Project2"/>
+		</Unit>
+		<Unit filename="/Users/hugogomes/FEUP/DA/projeto2/DA_Project2/menus.h">
+			<Option target="DA_Project2"/>
+		</Unit>
 		<Unit filename="/Users/hugogomes/FEUP/DA/projeto2/DA_Project2/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

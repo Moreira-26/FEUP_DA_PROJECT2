@@ -24,7 +24,6 @@ struct Edge {
     int duration;// An integer weight
     int residualCapacity  = 0;
     int reverseResidualCapacity = 0;
-    int flow = 0;
 };
 
 struct Node {
@@ -35,7 +34,7 @@ struct Node {
     int transhipment = 0;
     int dist = 0;
     int time = 0;
-    int latestTime = 0;
+    int waitingTime = 0;
     int degree = 0;
     bool used = false;
 };
@@ -43,16 +42,10 @@ struct Node {
 
 class Graph {
     int n;              // Graph size (vertices are numbered from 1 to n)
-    bool hasDir;        // false: undirect; true: directed
+    bool hasDir = false;
     vector<Node> nodes; // The list of nodes being represented
-    bool original = true;
 
 
-    /**
-     * Este método executa o algortimo djikstra em que o peso da aresta aumenta em 1 se o utilizador for obrigado a mudar de linha
-     * @param s id do nó de origem
-     */
-    void dijkstra_Lines(int s);
 
 public:
     void addNode();
@@ -91,6 +84,8 @@ public:
      */
     vector<Node>& getNodes();
 
+    int getNumberNodes();
+
     pair<int, list<int>> dijkstraMaximumCapacity(int s, int final);
 
     pair<int, list<int>> dijkstraTranshipments(int s,  int final);
@@ -99,17 +94,13 @@ public:
 
     void fordFulkersonGroupSize(int s, int t, int groupSize);
 
-    int earliestStart(int s, int t);
-
-    void latestFinish(int s, int t);
+    void earliestStart(int s, int t);
 
     void fordFulkersonTime(int s, int t);
 
     void testPaths (int s, int t);
 
     pair<int,list<int>> dijkstraMaximumCapacityPath(int v, int final);
-
-    void transposeGraph();
 };
 
 
