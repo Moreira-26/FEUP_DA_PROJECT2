@@ -90,7 +90,7 @@ public:
 
     pair<int, list<int>> dijkstraTranshipments(int s,  int final);
 
-    void fordFulkerson(int s, int t);
+    int fordFulkerson(int s, int t);
 
     void fordFulkersonGroupSize(int s, int t, int groupSize);
 

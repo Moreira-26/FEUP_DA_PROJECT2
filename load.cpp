@@ -3,8 +3,6 @@
 //
 
 #include "load.h"
-#include <fstream>
-#include <sstream>
 #include <iostream>
 
 

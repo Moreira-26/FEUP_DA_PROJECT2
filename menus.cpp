@@ -8,6 +8,7 @@ Menus::Menus(Graph& g) {
     this->g1 = g;
 }
 
+
 void Menus::mainMenu() {
     bool notExit = true;
     int input;
@@ -42,6 +43,7 @@ void Menus::mainMenu() {
         }
     }while(notExit);
 }
+
 
 void Menus::scenarioOneMenu() {
     bool notExit = true;
@@ -112,7 +114,7 @@ void Menus::scenarioOneMenu() {
 
 void Menus::scenarioTwoMenu() {
     bool notExit = true;
-    int input, src, dest;
+    int input, src, dest, groupSize;
     do {
         cout << "-------- Scenario Two --------" << endl;
         cout << endl;
@@ -136,10 +138,43 @@ void Menus::scenarioTwoMenu() {
                 notExit = false;
                 break;
             case 1:
-
+                cout << "Insert the source node between 1 and " << g1.getNumberNodes() << ": " << endl;
+                cin >> src;
+                while(input < 1 || input > g1.getNumberNodes()){
+                    cout << "Invalid input, choose a source node again!" << endl;
+                    cin.clear();
+                    cin >> src;
+                }
+                cout << "Insert the destination node between 1 and " << g1.getNumberNodes() << ": " << endl;
+                cin >> dest;
+                while(input < 1 || input > g1.getNumberNodes()){
+                    cout << "Invalid input, choose a destination node again!" << endl;
+                    cin.clear();
+                    cin >> dest;
+                }
+                cout << "Insert the group size: " << endl;
+                cin >> groupSize;
+                g1.fordFulkersonGroupSize(src,dest, groupSize);
                 break;
-            case 2:
 
+            case 2:
+                cout << "Insert the source node between 1 and " << g1.getNumberNodes() << ": " << endl;
+                cin >> src;
+                while(input < 1 || input > g1.getNumberNodes()){
+                    cout << "Invalid input, choose a source node again!" << endl;
+                    cin.clear();
+                    cin >> src;
+                }
+                cout << "Insert the destination node between 1 and " << g1.getNumberNodes() << ": " << endl;
+                cin >> dest;
+                while(input < 1 || input > g1.getNumberNodes()){
+                    cout << "Invalid input, choose a destination node again!" << endl;
+                    cin.clear();
+                    cin >> dest;
+                }
+                cout << "Insert the new group size: " << endl;
+                cin >> groupSize;
+                g1.fordFulkersonGroupSize(src,dest, groupSize);
                 break;
 
             case 3:
@@ -157,9 +192,10 @@ void Menus::scenarioTwoMenu() {
                     cin.clear();
                     cin >> dest;
                 }
-                g1.fordFulkerson(src, dest);
+                cout << "The maximum capacity is: " << g1.fordFulkerson(src, dest) << endl;
+                g1.printGraph();
                 break;
-                
+
             case 4:
                 cout << "Insert the source node between 1 and " << g1.getNumberNodes() << ": " << endl;
                 cin >> src;
@@ -201,6 +237,7 @@ void Menus::scenarioTwoMenu() {
 
 
 }
+
 
 void Menus::dataSet() {
     int input;

@@ -53,12 +53,12 @@ void Graph::setNumNodes(int numNodes) {
 }
 
 
-
-
 void Graph::printGraph() {
     for (int i = 0; i < nodes.size(); i++) {
         for (Edge &e: nodes[i].adj) {
-            cout << i + 1 << "->" << e.dest + 1 << " : " << e.reverseResidualCapacity << endl;
+            if(e.reverseResidualCapacity != 0) {
+                cout << i + 1 << "->" << e.dest + 1 << " : " << e.reverseResidualCapacity << endl;
+            }
         }
     }
 
@@ -247,11 +247,12 @@ void Graph::testPaths(int s, int t) {
 }
 
 //2.1, 2.2 and 2.3
-void Graph::fordFulkerson(int s, int t) {
+int Graph::fordFulkerson(int s, int t) {
     s--;
     t--;
     for (int i = 0; i < n; i++) {
         for (Edge &e: nodes[i].adj) {
+            e.reverseResidualCapacity = 0;
             e.residualCapacity = e.capacity;
         }
     }
@@ -284,15 +285,24 @@ void Graph::fordFulkerson(int s, int t) {
         }
         max_flow += pathFlow;
     }
+    return max_flow;
 }
 
 //2.1 and 2.2
 void Graph::fordFulkersonGroupSize(int s, int t, int groupSize) {
+    int max_flow;
     setNumNodes(n + 1);
     addNode();
     addEdge(n, s, groupSize, 24);
-    fordFulkerson(n, t);
+    max_flow = fordFulkerson(n, t);
     removeNode(nodes.size() - 1);
+    setNumNodes(n-1);
+    if(max_flow < groupSize){
+        cout << "The group size is bigger than the capacity of the graph" << endl << endl;
+        return;
+    }
+    printGraph();
+    cout << endl;
 
 }
 
@@ -446,7 +456,7 @@ void Graph::earliestStart(int s, int t) {
         }
     }
     for(int i = 0; i< n; i++){
-        if(nodes[i].used){
+        if(nodes[i].used && (nodes[i].waitingTime != 0)){
             cout << i +1 << ": " << nodes[i].waitingTime << endl;
         }
     }
