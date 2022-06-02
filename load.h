@@ -7,13 +7,12 @@
 
 #include <string>
 #include "graph.h"
-
+extern string FILE_NAME;
 using namespace  std;
 
 
 class Load {
 
-    string FILE_NAME = "in10.txt";
     int numNodes;
     int numEdges;
 public:

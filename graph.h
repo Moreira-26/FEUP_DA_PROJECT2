@@ -9,6 +9,12 @@
 #include <vector>
 #include <list>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+
+#define INF (INT_MAX/2)
+
+extern string FILE_NAME;
 
 using namespace std;
 
@@ -29,6 +35,7 @@ struct Node {
     int transhipment = 0;
     int dist = 0;
     int time = 0;
+    int latestTime = 0;
     int degree = 0;
     bool used = false;
 };
@@ -38,6 +45,7 @@ class Graph {
     int n;              // Graph size (vertices are numbered from 1 to n)
     bool hasDir;        // false: undirect; true: directed
     vector<Node> nodes; // The list of nodes being represented
+    bool original = true;
 
 
     /**
@@ -91,13 +99,17 @@ public:
 
     void fordFulkersonGroupSize(int s, int t, int groupSize);
 
-    void timeUntilReunite(int s, int t);
+    int earliestStart(int s, int t);
+
+    void latestFinish(int s, int t);
 
     void fordFulkersonTime(int s, int t);
 
     void testPaths (int s, int t);
 
     pair<int,list<int>> dijkstraMaximumCapacityPath(int v, int final);
+
+    void transposeGraph();
 };
 
 
