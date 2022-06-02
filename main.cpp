@@ -11,7 +11,7 @@ int main() {
     //g.timeUntilReunite(2,6);
     //g.fordFulkersonTime(1,6);
     //g.printGraph();
-    g.testPaths(1,6);
+    g.testPaths(1,210);
 
     return 0;
 }

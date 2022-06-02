@@ -13,7 +13,7 @@ using namespace  std;
 
 class Load {
 
-    string FILE_NAME = "in01.txt";
+    string FILE_NAME = "in10.txt";
     int numNodes;
     int numEdges;
 public:

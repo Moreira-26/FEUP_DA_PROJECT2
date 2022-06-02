@@ -83,9 +83,9 @@ public:
      */
     vector<Node>& getNodes();
 
-    pair<int, int> dijkstraMaximumCapacity(int s, int final);
+    pair<int, list<int>> dijkstraMaximumCapacity(int s, int final);
 
-    pair<int, int> dijkstraTranshipments(int s,  int final);
+    pair<int, list<int>> dijkstraTranshipments(int s,  int final);
 
     void fordFulkerson(int s, int t);
 
@@ -97,7 +97,7 @@ public:
 
     void testPaths (int s, int t);
 
-    list<int> bfs_path(int v, int final);
+    pair<int,list<int>> dijkstraMaximumCapacityPath(int v, int final);
 };
 
 
