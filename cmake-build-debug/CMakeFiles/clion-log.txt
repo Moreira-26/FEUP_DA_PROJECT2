@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/hugogomes/FEUP/DA/projeto2/DA_Project2
+/snap/clion/193/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/193/bin/ninja/linux/ninja -G Ninja -S /home/moreira/Documents/Faculdade/DA/DA_Project2 -B /home/moreira/Documents/Faculdade/DA/DA_Project2/cmake-build-debug
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/hugogomes/FEUP/DA/projeto2/DA_Project2/cmake-build-debug
+-- Build files have been written to: /home/moreira/Documents/Faculdade/DA/DA_Project2/cmake-build-debug

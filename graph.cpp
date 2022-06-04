@@ -236,10 +236,10 @@ void Graph::testPaths(int s, int t) {
     cout << endl;
     int path = 0;
 
-    for (auto &n: paths) {
+    for (auto &p: paths) {
         path++;
-        cout  << "Capacity: " << n.first << " Transhipments: " <<n.second.size() - 1 << " Path: " << path;
-        for (auto &s: n.second) {
+        cout  << "Dimension: " << p.first << " Transhipments: " <<p.second.size() - 1 << " Path: " << path;
+        for (auto &s: p.second) {
             cout << s + 1 << " ";
         }
         cout << endl;
