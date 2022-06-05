@@ -13,10 +13,15 @@ using namespace  std;
 
 class Load {
 
-    int numNodes;
-    int numEdges;
 public:
+    /**
+     * Constructor of the class Load
+     */
     Load();
+    /**
+     * Method responsible for reading all buses from buse's file and creating nodes and edges
+     * @param g Graph where nodes and edges will be added
+     */
     void loadBuses(Graph &g);
 
 };

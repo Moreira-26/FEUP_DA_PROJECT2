@@ -18,15 +18,31 @@ class Menus {
     Load l;
 
 public:
+    /**
+     * Constructor of the Menus class
+     * @param g // graph with the first data set already read
+     */
 
     Menus(Graph& g);
 
+    /**
+     * This method is responsible to draw the main menu and handle if the inputs
+     */
     void mainMenu();
 
+    /**
+     * This method is responsible to draw the scenario one menu and handle with the inputs
+     */
     void scenarioOneMenu();
 
+    /**
+     * This method is responsible to draw the scenario two menu and handle with the inputs
+     */
     void scenarioTwoMenu();
 
+    /**
+     * This method is responsible to draw the data set menu and handle with the inputs
+     */
     void dataSet();
 
 };

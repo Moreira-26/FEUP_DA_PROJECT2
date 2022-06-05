@@ -15,7 +15,7 @@
 
 using namespace std;
 
-// Binary min-heap to represent integer keys of type K with values (priorities) of type V
+// Binary max-heap to represent integer keys of type K with values (priorities) of type V
 template <class K, class V>
 class MaxHeap {
     struct Node { // An element of the heap: a pair (key, value)
@@ -30,19 +30,19 @@ class MaxHeap {
     const K KEY_NOT_FOUND;
 
     /**
-     * Faz um valor subir a árvore até chegar a sua posição
+     * Makes a value go up the tree until it reaches it's position
      * @param i
      */
     void upHeap(int i);
 
     /**
-     * Faz um valor descer a árvore até chegar a sua posição
+     * Makes a value go down the tree until it reaches it's position
      * @param i
      */
     void downHeap(int i);
 
     /**
-     * Troca duas posições da heap (atualiza as suas posições)
+     * Changes two positions in the heap (updates their positions)
      * @param i1
      * @param i2
      */
@@ -50,27 +50,27 @@ class MaxHeap {
 
 public:
     /**
-     * Construtor da classe minHeap
-     * @param n tamanho máximo da minHeap
+     * Constructor of the MaxHeap class
+     * @param n maximum size of the heap
      * @param notFound
      */
     MaxHeap(int n, const K& notFound); // Create a min-heap for a max of n pairs (K,V) with notFound returned when empty
 
     /**
      *
-     * @return o número de elementos na heap
+     * @return Number of elements of the heap
      */
     int getSize();
 
     /**
-     * Este método indica se a heap tem uma chave
+     * This method indicates if the key has a value
      * @param key
-     * @return true se tiver
+     * @return true if it has
      */
     bool hasKey(const K& key);
 
     /**
-     * Este método insere (key,value) na heap
+     * This method insertts (key,value) in the heap
      * @param key
      * @param value
      */
@@ -84,8 +84,8 @@ public:
     void increaseKey(const K& key, const V& value);
 
     /**
-     * Este método remove e retorna a key com o menor valor
-     * @return a key com o menor valor
+     * his method removes and returnes the key with the highest value
+     * @return the key with the highest value
      */
     K removeMax();
 };
@@ -105,9 +105,9 @@ template <class K, class V>
 void MaxHeap<K,V>::downHeap(int i) {
     while (LEFT(i) <= size) { // while within heap limits
         int j = LEFT(i);
-        if (RIGHT(i)<=size && a[RIGHT(i)].value > a[j].value) j = RIGHT(i); // choose smaller child
-        if (a[i].value > a[j].value) break;   // node already smaller than children, stop
-        swap(i, j);                    // otherwise, swap with smaller child
+        if (RIGHT(i)<=size && a[RIGHT(i)].value > a[j].value) j = RIGHT(i);
+        if (a[i].value > a[j].value) break;
+        swap(i, j);
         i = j;
     }
 }
@@ -150,7 +150,7 @@ template <class K, class V>
 void MaxHeap<K,V>::increaseKey(const K& key, const V& value) {
     if (!hasKey(key)) return; // key does not exist, do nothing
     int i = pos[key];
-    if (value < a[i].value) return; // value would decrease, do nothing
+    if (value < a[i].value) return; // value would increase, do nothing
     a[i].value = value;
     upHeap(i);
 }

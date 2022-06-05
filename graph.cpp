@@ -68,7 +68,6 @@ void Graph::printGraph() {
 pair<int, list<int>> Graph::dijkstraMaximumCapacity(int s, int final) {
     s--;
     final--;
-    int transhipments = 0;
     MaxHeap<int, int> q(n, -1);
     for (int v = 0; v < n; v++) {
         nodes[v].cap = 0;
@@ -238,7 +237,7 @@ void Graph::testPaths(int s, int t) {
 
     for (auto &p: paths) {
         path++;
-        cout  << "Dimension: " << p.first << " Transhipments: " <<p.second.size() - 1 << " Path: " << path;
+        cout  << "Dimension: " << p.first << " Transhipments: " <<p.second.size() - 2 << " Solution Number: " << path << " path: ";
         for (auto &s: p.second) {
             cout << s + 1 << " ";
         }
